@@ -23,13 +23,27 @@ services:
     mongo:
         image: mongo:6.0
         container_name: api-monitoring-mongo
+        # Use 27018 on the host to avoid conflicting with a local mongod on 27017.
+        # Connect Compass and local dev to mongodb://localhost:27018
         ports:
-            - "27017:27017"
+            - "27018:27017"
         volumes:
             - mongo_data:/data/db
         networks:
             - api-monitoring-network
         restart: unless-stopped
+        healthcheck:
+            test:
+                [
+                    "CMD",
+                    "mongosh",
+                    "--quiet",
+                    "--eval",
+                    "db.adminCommand('ping').ok",
+                ]
+            interval: 10s
+            timeout: 5s
+            retries: 5
     rabbitmq:
         image: rabbitmq:3-management-alpine
         container_name: api-monitoring-rabbitmq
@@ -75,8 +89,8 @@ services:
             NODE_ENV: production
             PORT: 3000
             # MongoDB (local container)
-            MONGO_URI: mongodb://mongo:27017/api_monitoring
-            MONGO_DB_NAME: api_monitoring
+            MONGO_URI: mongodb://mongo:27017
+            MONGO_DB_NAME: api-monitoring-db
             # PostgreSQL (Docker container)
             PG_HOST: postgres
             PG_PORT: 5432
@@ -99,13 +113,21 @@ services:
         networks:
             - api-monitoring-network
         depends_on:
+            mongo:
+                condition: service_healthy
             postgres:
                 condition: service_healthy
             rabbitmq:
                 condition: service_healthy
         restart: unless-stopped
         healthcheck:
-            test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+            test:
+                [
+                    "CMD",
+                    "node",
+                    "-e",
+                    "fetch('http://localhost:3000/health').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+                ]
             interval: 30s
             timeout: 10s
             retries: 3

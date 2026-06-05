@@ -10,8 +10,9 @@ const config = {
     //MongoDB
     mongo: {
         uri:
-            process.env.MONGO_URI || "mongodb://localhost:27017/api-monitoring",
-        dbName: process.env.MONGO_DB_NAME || "api-monitoring",
+            process.env.MONGO_URI ||
+            "mongodb://localhost:27017/api-monitoring-db",
+        dbName: process.env.MONGO_DB_NAME || "api-monitoring-db",
     },
 
     //PostgreSQL
@@ -32,7 +33,7 @@ const config = {
         retryAttempts: parseInt(process.env.RABBITMQ_RETRY_ATTEMPTS || "3", 10),
         retryDelay: parseInt(process.env.RABBITMQ_RETRY_DELAY || "1000", 10),
     },
-    
+
     //jwt
     jwt: {
         secret: process.env.JWT_SECRET || "your_jwt_secret",
@@ -45,7 +46,12 @@ const config = {
         max: parseInt(process.env.RATE_LIMIT_MAX || "1000", 10), // limit each IP to 1000 requests per windowMs
     },
 
-    
+    // Cookies
+    cookies: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        expiresIn: 24 * 60 * 60 * 1000, // 24 hours
+    },
 };
 
 export default config;

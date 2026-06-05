@@ -1,5 +1,5 @@
 import logger from "../config/logger.js";
-import responseFormatter from "../utils/responseFormatter.js";
+import ResponseFormatter from "../utils/responseFormatter.js";
 
 // Centralized error handling middleware
 const errorHandler = (err, req, res, next) => {
@@ -30,7 +30,9 @@ const errorHandler = (err, req, res, next) => {
         message = "Token Expired";
     }
 
-    res.status(statusCode).json(responseFormatter(message, statusCode, errors));
+    res.status(statusCode).json(
+        ResponseFormatter.error(message, statusCode, errors),
+    );
 };
 
 export default errorHandler;
