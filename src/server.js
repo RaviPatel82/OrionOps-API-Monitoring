@@ -14,6 +14,7 @@ import cookieParser from "cookie-parser";
 // Import routes
 import authRouter from "./services/auth/routes/authRouter.js";
 import clientRouter from "./services/client/routes/clientRounter.js";
+import ingestRouter from "./services/ingest/routes/ingestRoutes.js";
 
 // Initialize Express app
 const app = express();
@@ -84,6 +85,7 @@ app.get("/", (req, res) => {
  * API Routes
  */
 app.use("/api/auth", authRouter);
+app.use("/api/hit", ingestRouter);
 app.use("/api", clientRouter);
 
 /**
