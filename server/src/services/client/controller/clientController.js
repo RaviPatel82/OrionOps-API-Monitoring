@@ -16,16 +16,6 @@ export class ClientController {
 
     async createClient(req, res, next) {
         try {
-            const isSuperAdmin =
-                await this.authService.checkSuperAdminPermissions(
-                    req.user.userId,
-                );
-
-            if (!isSuperAdmin) {
-                return res
-                    .status(403)
-                    .json(ResponseFormatter.error("Access denied", 403));
-            }
             const client = await this.clientService.createClient(
                 req.body,
                 req.user,

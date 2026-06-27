@@ -55,14 +55,19 @@ export class ClientService {
                 );
             }
 
-            const client = await this.clientRepository.create({
+            const clientDataObj = {
                 name,
                 slug,
                 email,
                 discription,
                 website,
-                createdBy: adminUser.userId,
-            });
+            };
+            
+            if (adminUser && adminUser.userId) {
+                clientDataObj.createdBy = adminUser.userId;
+            }
+
+            const client = await this.clientRepository.create(clientDataObj);
             return client;
         } catch (error) {
             logger.error("Error creating client:", error);
@@ -85,8 +90,25 @@ export class ClientService {
             if (!client) {
                 throw new AppError("Client not found", 404);
             }
-            if (!this.canUserAccessClient(adminUser, clientId)) {
-                throw new AppError("Access denied", 403);
+            const existingUsers = await this.userRepository.findByClientId(clientId);
+            const hasUsers = existingUsers && existingUsers.length > 0;
+
+            if (hasUsers) {
+                if (!adminUser) {
+                    throw new AppError("Authentication required", 401);
+                }
+                if (!this.canUserAccessClient(adminUser, clientId)) {
+                    throw new AppError("Access denied", 403);
+                }
+                if (
+                    adminUser.role !== APPLICATION_ROLES.SUPER_ADMIN &&
+                    adminUser.role !== APPLICATION_ROLES.CLIENT_ADMIN
+                ) {
+                    throw new AppError(
+                        "Access denied - Only Super Admin and Client Admin can create users",
+                        403,
+                    );
+                }
             }
             const {
                 username,
