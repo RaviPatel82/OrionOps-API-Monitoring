@@ -62,6 +62,17 @@ class MongoApiKeyRepository extends BaseApiKeyRepository {
             throw error;
         }
     }
+
+    async deleteByKeyId(keyId) {
+        try {
+            const deletedKey = await this.model.findOneAndDelete({ keyId });
+            logger.info(`ApiKey deleted:`, { keyId });
+            return deletedKey;
+        } catch (error) {
+            logger.error(`Error deleting api key:`, error);
+            throw error;
+        }
+    }
 }
 
 export default new MongoApiKeyRepository();

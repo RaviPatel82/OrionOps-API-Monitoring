@@ -80,7 +80,7 @@ export class IngestService {
             "latencyMs",
             "clientId",
         ];
-        const missingFields = requiredFields.filter((field) => !hitData[field]);
+        const missingFields = requiredFields.filter((field) => hitData[field] === undefined || hitData[field] === null);
 
         if (missingFields.length > 0) {
             throw new AppError(

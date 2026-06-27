@@ -14,4 +14,7 @@ export default class BaseApiKeyRepository {
     async countByClientId(clientId, filters) {
         throw new Error("Method not implemented");
     }
+    async deleteByKeyId(keyId) {
+        throw new Error("Method not implemented");
+    }
 }

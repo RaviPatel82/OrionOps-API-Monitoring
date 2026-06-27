@@ -79,5 +79,34 @@ class MongoUserRepository extends BaseRepository {
             throw error;
         }
     }
+
+    async findByClientId(clientId) {
+        try {
+            const users = await this.model
+                .find({ clientId, isActive: true })
+                .select("-password")
+                .sort({ createdAt: -1 });
+            return users;
+        } catch (error) {
+            logger.error(
+                `Error finding users by client ID: ${error.message}`,
+            );
+            throw error;
+        }
+    }
+
+    async deactiveUserById(id) {
+        try {
+            const user = await this.model.findByIdAndUpdate(
+                id,
+                { isActive: false },
+                { new: true },
+            );
+            return user;
+        } catch (error) {
+            logger.error(`Error deactivating user by ID: ${error.message}`);
+            throw error;
+        }
+    }
 }
 export default new MongoUserRepository();

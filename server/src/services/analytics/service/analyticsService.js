@@ -2,11 +2,15 @@ import logger from "../../../shared/config/logger.js";
 import AppError from "../../../shared/utils/AppError.js";
 
 export class AnalyticsService {
-    constructor(metricsRepo) {
+    constructor(metricsRepo, apiHitRepo) {
         if (!metricsRepo) {
             throw new Error("AnalyticsService requires a metricsRepository");
         }
+        if (!apiHitRepo) {
+            throw new Error("AnalyticsService requires an apiHitRepository");
+        }
         this.metricsRepository = metricsRepo;
+        this.apiHitRepository = apiHitRepo;
     }
 
     async getOverallStats(clientId, filters = {}) {
@@ -78,11 +82,9 @@ export class AnalyticsService {
                 totalHits: parseInt(endpoint.total_hits),
                 avgLatency: parseFloat(endpoint.avg_latency).toFixed(2),
                 errorHits: parseInt(endpoint.error_hits),
-                errorRate: parseFloat(
-                    (parseInt(endpoint.error_hits) /
-                        parseInt(endpoint.total_hits)) *
-                        100,
-                ).toFixed(2),
+                errorRate: endpoint.total_hits > 0
+                    ? parseFloat(((parseInt(endpoint.error_hits) / parseInt(endpoint.total_hits)) * 100).toFixed(2))
+                    : 0,
             }));
         } catch (error) {
             logger.error("Error getting top endpoints:", error);
@@ -125,6 +127,33 @@ export class AnalyticsService {
             }));
         } catch (error) {
             logger.error("Error getting time series:", error);
+            throw error;
+        }
+    }
+
+    async getRecentHits(clientId, filters = {}) {
+        try {
+            const hitsData = await this.apiHitRepository.findHits({
+                ...filters,
+                clientId,
+            });
+
+            const formattedHits = hitsData.hits.map((hit) => {
+                const { _id, __v, createdAt, updatedAt, ...rest } = hit;
+                return {
+                    ...rest,
+                    id: _id.toString(),
+                };
+            });
+
+            return {
+                hits: formattedHits,
+                total: hitsData.total,
+                limit: filters.limit ? parseInt(filters.limit, 10) : 50,
+                offset: filters.offset ? parseInt(filters.offset, 10) : 0,
+            };
+        } catch (error) {
+            logger.error("Error getting recent hits:", error);
             throw error;
         }
     }

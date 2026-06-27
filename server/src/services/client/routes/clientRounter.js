@@ -27,4 +27,19 @@ router.get("/admin/clients/:clientId/api-key", (req, res, next) =>
     clientController.getClientApiKeys(req, res, next),
 );
 
+// delete an API key for a client
+router.delete("/admin/clients/:clientId/api-key/:keyId", (req, res, next) =>
+    clientController.deleteApiKey(req, res, next),
+);
+
+// get all users for a client
+router.get("/admin/clients/:clientId/users", (req, res, next) =>
+    clientController.getClientUsers(req, res, next),
+);
+
+// deactivate a user for a client
+router.patch("/admin/clients/:clientId/users/:userId", (req, res, next) =>
+    clientController.deactiveClientUser(req, res, next),
+);
+
 export default router;

@@ -228,4 +228,127 @@ export class ClientService {
             throw error;
         }
     }
+
+    async deleteApiKey(clientId, keyId, user) {
+        try {
+            const client = await this.clientRepository.findById(clientId);
+            if (!client) {
+                throw new AppError("Client not found", 404);
+            }
+            if (!this.canUserAccessClient(user, clientId)) {
+                throw new AppError("Access denied", 403);
+            }
+            if (
+                !(
+                    user.role === APPLICATION_ROLES.SUPER_ADMIN ||
+                    user.role === APPLICATION_ROLES.CLIENT_ADMIN
+                )
+            ) {
+                throw new AppError(
+                    "Access denied - Only Super Admin and Client Admin can delete API keys",
+                    403,
+                );
+            }
+
+            const apiKeys =
+                await this.apiKeyRepository.findByClientId(clientId);
+            const keyBelongsToClient = apiKeys.some(
+                (key) => key.keyId === keyId,
+            );
+            if (!keyBelongsToClient) {
+                throw new AppError(
+                    "API key not found for this client",
+                    404,
+                );
+            }
+
+            const deletedKey =
+                await this.apiKeyRepository.deleteByKeyId(keyId);
+
+            logger.info("API key deleted", {
+                clientId,
+                keyId,
+                deletedBy: user.userId,
+            });
+            return deletedKey;
+        } catch (error) {
+            logger.error("Error deleting API key:", error);
+            throw error;
+        }
+    }
+
+    async getClientUsers(clientId, user) {
+        try {
+            const client = await this.clientRepository.findById(clientId);
+            if (!client) {
+                throw new AppError("Client not found", 404);
+            }
+            if (!this.canUserAccessClient(user, clientId)) {
+                throw new AppError("Access denied to this client", 403);
+            }
+
+            const users =
+                await this.userRepository.findByClientId(clientId);
+            return users;
+        } catch (error) {
+            logger.error("Error getting client users:", error);
+            throw error;
+        }
+    }
+
+    async deactiveClientUser(clientId, userId, requestingUser) {
+        try {
+            const client = await this.clientRepository.findById(clientId);
+            if (!client) {
+                throw new AppError("Client not found", 404);
+            }
+            if (!this.canUserAccessClient(requestingUser, clientId)) {
+                throw new AppError("Access denied", 403);
+            }
+            if (
+                !(
+                    requestingUser.role === APPLICATION_ROLES.SUPER_ADMIN ||
+                    requestingUser.role === APPLICATION_ROLES.CLIENT_ADMIN
+                )
+            ) {
+                throw new AppError(
+                    "Access denied - Only Super Admin and Client Admin can deactivate users",
+                    403,
+                );
+            }
+
+            // Users cannot deactivate themselves
+            if (requestingUser.userId.toString() === userId.toString()) {
+                throw new AppError("You cannot deactivate your own account", 400);
+            }
+
+            // Verify the target user belongs to this client
+            const targetUser = await this.userRepository.findById(userId);
+            if (!targetUser || !targetUser.isActive) {
+                throw new AppError("User not found", 404);
+            }
+            if (
+                !targetUser.clientId ||
+                targetUser.clientId.toString() !== clientId.toString()
+            ) {
+                throw new AppError(
+                    "User does not belong to this client",
+                    404,
+                );
+            }
+
+            const deactivatedUser =
+                await this.userRepository.deactiveUserById(userId);
+
+            logger.info("Client user deactivated", {
+                clientId,
+                userId,
+                deactivatedBy: requestingUser.userId,
+            });
+            return deactivatedUser;
+        } catch (error) {
+            logger.error("Error deactivating client user:", error);
+            throw error;
+        }
+    }
 }

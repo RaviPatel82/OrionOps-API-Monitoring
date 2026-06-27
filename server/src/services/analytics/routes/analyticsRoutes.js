@@ -13,4 +13,8 @@ router.get("/dashboard", authenticate, (req, res, next) =>
     analyticsController.getDashboard(req, res, next),
 );
 
+router.get("/hits", authenticate, (req, res, next) =>
+    analyticsController.getHits(req, res, next),
+);
+
 export default router;

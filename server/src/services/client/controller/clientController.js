@@ -110,4 +110,69 @@ export class ClientController {
             next(error);
         }
     }
+
+    async deleteApiKey(req, res, next) {
+        try {
+            const { clientId, keyId } = req.params;
+            await this.clientService.deleteApiKey(
+                clientId,
+                keyId,
+                req.user,
+            );
+            return res
+                .status(200)
+                .json(
+                    ResponseFormatter.success(
+                        null,
+                        "API key deleted successfully",
+                        200,
+                    ),
+                );
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getClientUsers(req, res, next) {
+        try {
+            const { clientId } = req.params;
+            const users = await this.clientService.getClientUsers(
+                clientId,
+                req.user,
+            );
+            return res
+                .status(200)
+                .json(
+                    ResponseFormatter.success(
+                        users,
+                        "Client users fetched successfully",
+                        200,
+                    ),
+                );
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async deactiveClientUser(req, res, next) {
+        try {
+            const { clientId, userId } = req.params;
+            await this.clientService.deactiveClientUser(
+                clientId,
+                userId,
+                req.user,
+            );
+            return res
+                .status(200)
+                .json(
+                    ResponseFormatter.success(
+                        null,
+                        "Client user deactivated successfully",
+                        200,
+                    ),
+                );
+        } catch (error) {
+            next(error);
+        }
+    }
 }

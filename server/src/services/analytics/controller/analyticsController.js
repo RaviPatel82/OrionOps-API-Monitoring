@@ -76,13 +76,71 @@ export class AnalyticsController {
             const dashboard = {
                 stats,
                 topEndpoints,
-                recentActitivy: recentTimeSeries,
+                recentActivity: recentTimeSeries,
             };
 
             res.status(200).json(
                 ResponseFormatter.success(
                     dashboard,
                     "Dashboard data retrieved successfully",
+                    200,
+                ),
+            );
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getHits(req, res, next) {
+        try {
+            const {
+                startTime,
+                endTime,
+                statusClass,
+                endpoint,
+                serviceName,
+                method,
+                limit,
+                offset,
+                sortBy,
+                sortDir,
+            } = req.query;
+
+            const isSuperAdmin = await this.ensureCanViewAnalytics(req);
+            const finalClientId = await this.resolveFinalClientId(
+                req,
+                isSuperAdmin,
+            );
+            const timeRange = this.validateTimeRange(startTime, endTime);
+
+            if (statusClass) {
+                const allowedStatusClasses = ["2xx", "3xx", "4xx", "5xx"];
+                if (!allowedStatusClasses.includes(statusClass.toLowerCase())) {
+                    throw new AppError("Invalid statusClass provided", 400);
+                }
+            }
+
+            const filters = {
+                ...timeRange,
+                statusClass: statusClass?.toLowerCase(),
+                endpoint,
+                serviceName,
+                method,
+                limit: limit ? parseInt(limit, 10) : 50,
+                offset: offset ? parseInt(offset, 10) : 0,
+                sortBy,
+                sortDir,
+            };
+
+            const hitsData = await this.analyticsService.getRecentHits(
+                finalClientId,
+                filters,
+            );
+
+            res.status(200).json(
+                ResponseFormatter.success(
+                    hitsData,
+                    "Hits retrieved successfully",
                     200,
                 ),
             );
