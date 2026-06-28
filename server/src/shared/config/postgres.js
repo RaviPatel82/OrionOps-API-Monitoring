@@ -28,6 +28,10 @@ class PostgresConnection {
                 max: 20,
                 idleTimeoutMillis: 30000,
                 connectionTimeoutMillis: 2000,
+                ssl:
+                    config.node_env === "production" ?
+                        { rejectUnauthorized: false }
+                    :   false,
             });
             this.pool.on("error", (err) => {
                 logger.error("Unexpected error on idle PG client", err);

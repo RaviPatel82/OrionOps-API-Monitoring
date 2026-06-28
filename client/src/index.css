@@ -1,0 +1,204 @@
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Fira+Sans:wght@300;400;500;600;700&display=swap");
+@import "tailwindcss";
+
+@theme {
+  /* Dark Mode (OLED) Colors from UI/UX Pro Max */
+  --color-background: #09090b;
+  /* Pure Zinc Dark */
+  --color-foreground: #f4f4f5;
+  /* Zinc 100 Light Text */
+
+  --color-primary: #6366f1;
+  /* Indigo Accent */
+  --color-primary-foreground: #ffffff;
+
+  --color-secondary: #18181b;
+  /* Zinc 900 Card Accent */
+  --color-secondary-foreground: #f4f4f5;
+
+  --color-muted: #18181b;
+  --color-muted-foreground: #a1a1aa;
+  /* Zinc 400 Muted Text */
+
+  --color-accent: #27272a;
+  /* Zinc 800 Hover Accents */
+  --color-accent-foreground: #ffffff;
+
+  --color-border: #27272a;
+  /* Zinc 800 borders */
+  --color-input: #27272a;
+  --color-ring: #6366f1;
+
+  --color-card: #09090b;
+  --color-card-foreground: #f4f4f5;
+
+  --color-popover: #09090b;
+  --color-popover-foreground: #f4f4f5;
+
+  /* Custom Tech Accent Colors */
+  --color-tech-indigo: #6366f1;
+  --color-tech-emerald: #10b981;
+  --color-tech-rose: #ef4444;
+  --color-tech-amber: #f59e0b;
+  --color-tech-zinc: #27272a;
+  --color-tech-charcoal: #18181b;
+
+  /* Typography from UI/UX Pro Max */
+  --font-sans: "Fira Sans", system-ui, sans-serif;
+  --font-display: "Fira Sans", system-ui, sans-serif;
+  --font-mono: "Fira Code", monospace;
+
+  /* Spacing & Radius */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-full: 9999px;
+
+  /* Line Heights */
+  --leading-hero: 1.10;
+  --leading-tight: 1.20;
+  --leading-relaxed: 1.6;
+
+  /* Shadows for Dark Mode Glow */
+  --shadow-active-tab: inset 0 -4px 0 0 #6366f1;
+  --shadow-hover-tab: inset 0 -4px 0 0 #27272a;
+}
+
+@layer base {
+  :root {
+    /* HSL parts for legacy hsl(var(--...)) compatibility in Shadcn */
+    --background: 240 10% 3.9%;
+    --foreground: 240 5% 96%;
+    --primary: 243.4 75.4% 58.6%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 5.9% 10%;
+    --secondary-foreground: 240 5% 96%;
+    --muted: 240 5.9% 10%;
+    --muted-foreground: 240 3.8% 66.1%;
+    --accent: 240 5.9% 15%;
+    --accent-foreground: 0 0% 100%;
+    --border: 240 5.9% 15%;
+    --input: 240 5.9% 15%;
+    --ring: 243.4 75.4% 58.6%;
+    --radius: 6px;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    line-height: var(--leading-relaxed);
+    background-color: #09090b;
+    /* Deep Dark */
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+    line-height: var(--leading-hero);
+    color: var(--color-foreground);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 10px;
+}
+
+/* Chart container fix */
+.chart-wrapper {
+  height: 350px !important;
+  width: 100%;
+}
+
+/* Premium Cursor */
+.custom-cursor {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  background: var(--color-primary);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+  transition: transform 0.15s ease-out, background-color 0.3s ease;
+  transform: translate(-50%, -50%);
+}
+
+.custom-cursor.hovering {
+  transform: translate(-50%, -50%) scale(2.5);
+  background: white;
+}
+
+.custom-cursor.clicking {
+  transform: translate(-50%, -50%) scale(0.8);
+}
+
+/* Grid Background */
+.bg-grid-pattern {
+  background-image: radial-gradient(circle at 1px 1px, var(--color-border) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+/* Bento Grid System */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: minmax(160px, auto);
+  gap: 1.5rem;
+}
+
+.bento-item {
+  @apply bg-background border border-border rounded-2xl p-6 transition-all duration-300 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/5;
+}
+
+.bento-item-large {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.bento-item-wide {
+  grid-column: span 2;
+}
+
+.bento-item-tall {
+  grid-row: span 2;
+}
+
+@media (max-width: 1024px) {
+  .bento-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .bento-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Form layouts */
+.settings-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}

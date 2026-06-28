@@ -1,0 +1,265 @@
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: inline-flex;
+  animation: marquee 60s linear infinite;
+}
+
+/* Base Themes from DESIGN.md */
+.bg-zapier-cream {
+  background-color: var(--color-background);
+}
+
+.text-zapier-black {
+  color: var(--color-foreground);
+}
+
+.text-zapier-charcoal {
+  color: var(--color-muted-foreground);
+}
+
+.text-zapier-orange {
+  color: var(--color-primary);
+}
+
+.border-zapier-sand {
+  border: 1px solid var(--color-border);
+}
+
+/* Typography from DESIGN.md */
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+.leading-hero {
+  line-height: var(--leading-hero);
+}
+
+.leading-tight-custom {
+  line-height: var(--leading-tight);
+}
+
+.leading-relaxed-custom {
+  line-height: var(--leading-relaxed);
+}
+
+/* Components from DESIGN.md */
+.btn-primary-orange {
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-primary);
+  font-weight: 600;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-primary-orange:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+}
+
+.btn-primary-dark {
+  background-color: var(--color-secondary);
+  color: var(--color-secondary-foreground);
+  padding: 20px 24px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  font-weight: 600;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-primary-dark:hover {
+  background-color: var(--color-accent);
+  color: var(--color-accent-foreground);
+  border-color: var(--color-border);
+}
+
+.zapier-card {
+  background-color: var(--color-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+}
+
+.zapier-card:hover {
+  border-color: var(--color-primary);
+}
+
+.tab-active-indicator {
+  box-shadow: var(--color-primary) 0px -4px 0px 0px inset;
+}
+
+.tab-hover-indicator:hover {
+  box-shadow: var(--color-border) 0px -4px 0px 0px inset;
+}
+
+.section-label-upper {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-foreground);
+}
+
+/* Technical Blueprint Utilities */
+.bg-technical-grid {
+  background-size: 40px 40px;
+  background-image:
+    linear-gradient(to right, rgba(99, 102, 241, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(99, 102, 241, 0.05) 1px, transparent 1px);
+}
+
+.perspective-3000 {
+  perspective: 3000px;
+}
+
+.perspective-2000 {
+  perspective: 2000px;
+}
+
+.shadow-premium-xl {
+  box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.5), 0 20px 40px -10px rgba(0, 0, 0, 0.3);
+}
+
+.shadow-premium-lg {
+  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.3);
+}
+
+/* Animations */
+@keyframes pulse-soft {
+
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.6;
+    transform: scale(1.05);
+  }
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 4s infinite ease-in-out;
+}
+
+/* Custom Selection */
+::selection {
+  background: rgba(99, 102, 241, 0.2);
+  color: var(--color-foreground);
+}
+
+/* Light Theme variables for Landing Page only */
+.landing-light-theme {
+  --color-background: #ffffff;
+  /* White background */
+  --color-foreground: #09090b;
+  /* Zinc-950 text */
+
+  --color-primary: #4f46e5;
+  /* Indigo Accent */
+  --color-primary-foreground: #ffffff;
+
+  --color-secondary: #f4f4f5;
+  /* Zinc-100 Light Cards */
+  --color-secondary-foreground: #09090b;
+
+  --color-muted: #f4f4f5;
+  --color-muted-foreground: #71717a;
+  /* Zinc-500 muted text */
+
+  --color-accent: #e4e4e7;
+  /* Zinc-200 hover accent */
+  --color-accent-foreground: #09090b;
+
+  --color-border: #e4e4e7;
+  /* Zinc-200 borders */
+  --color-input: #e4e4e7;
+  --color-ring: #4f46e5;
+
+  --color-card: #ffffff;
+  --color-card-foreground: #09090b;
+
+  --color-popover: #ffffff;
+  --color-popover-foreground: #09090b;
+
+  /* Tech Accents */
+  --color-tech-indigo: #4f46e5;
+  --color-tech-emerald: #059669;
+  --color-tech-rose: #dc2626;
+  --color-tech-amber: #d97706;
+  --color-tech-zinc: #e4e4e7;
+  --color-tech-charcoal: #f4f4f5;
+}
+
+/* Specific Light Theme styling overrides */
+.landing-light-theme .bg-technical-grid {
+  background-size: 40px 40px;
+  background-image:
+    linear-gradient(to right, rgba(79, 70, 229, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(79, 70, 229, 0.04) 1px, transparent 1px) !important;
+}
+
+.landing-light-theme nav.fixed {
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02);
+}
+
+.landing-light-theme .shadow-premium-xl {
+  box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.06), 0 20px 40px -10px rgba(0, 0, 0, 0.03) !important;
+}
+
+.landing-light-theme .shadow-premium-lg {
+  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.03) !important;
+}
+
+.landing-light-theme .bg-black {
+  background-color: rgba(244, 244, 245, 0.8) !important;
+}
+
+.landing-light-theme .bg-black {
+  background-color: rgba(244, 244, 245, 0.4) !important;
+}
+
+.landing-light-theme .bg-black {
+  background-color: rgba(9, 9, 11, 0.3) !important;
+}
+
+/* Ensure developer code window block stays dark inside light page */
+.landing-light-theme .bg-black {
+  background-color: #09090b !important;
+  color: #f4f4f5 !important;
+}
+
+.landing-light-theme .bg-black * {
+  color: inherit;
+}
+
+.landing-light-theme .bg-black .text-emerald-400 {
+  color: #34d399 !important;
+}
+
+.landing-light-theme .bg-black .text-primary {
+  color: #818cf8 !important;
+}
+
+.landing-light-theme .bg-black .text-muted-foreground {
+  color: #a1a1aa !important;
+}
