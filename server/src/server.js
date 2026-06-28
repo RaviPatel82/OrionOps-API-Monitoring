@@ -25,7 +25,11 @@ app.set('trust proxy', 1);
 app.use(helmet());
 app.use(
     cors({
-        origin: true,
+        origin: [
+            "http://localhost:5173",
+            "http://localhost:3000",
+            "https://orionops-dev.vercel.app"
+        ],
         credentials: true,
     }),
 );

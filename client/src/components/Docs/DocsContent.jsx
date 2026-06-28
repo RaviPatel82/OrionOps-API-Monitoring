@@ -57,7 +57,7 @@ const server = http.createServer((req, res) => {
     },
     other: {
       install: '# No installation required for raw HTTP',
-      code: `curl -X POST https://orionops.app/api/hit \\
+      code: `curl -X POST https://orionops-api-c8gdc0h3dzdxh4bt.centralindia-01.azurewebsites.net/api/hit \\
   -H "x-api-key: YOUR_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{
@@ -162,7 +162,7 @@ const server = http.createServer((req, res) => {
               {[
                 { opt: 'apiKey', env: 'ORIONOPS_API_KEY', def: 'null', desc: 'Required. Your project API key.' },
                 { opt: 'serviceName', env: 'ORIONOPS_SERVICE_NAME', def: 'null', desc: 'Required. Logical name for this service/API.' },
-                { opt: 'endpoint', env: 'ORIONOPS_ENDPOINT', def: '"https://orionops.app/api/hit"', desc: 'Override the ingestion URL (for enterprise/on-prem).' },
+                { opt: 'endpoint', env: 'ORIONOPS_ENDPOINT', def: '"https://orionops-api-c8gdc0h3dzdxh4bt.centralindia-01.azurewebsites.net/api/hit"', desc: 'Override the ingestion URL (for enterprise/on-prem).' },
                 { opt: 'enabled', env: 'ORIONOPS_ENABLED', def: 'true', desc: 'Set to false to completely disable metrics collection.' },
                 { opt: 'enableLogging', env: 'ORIONOPS_ENABLE_LOGGING', def: 'false', desc: 'If true, logs a warning to console if ingestion fails.' },
                 { opt: 'timeout', env: 'ORIONOPS_TIMEOUT', def: '5000', desc: 'Timeout in ms for sending metrics to the ingestion server.' },
@@ -315,7 +315,7 @@ const server = http.createServer((req, res) => {
         <div className="bg-card border border-border rounded-lg p-6 space-y-6">
            <div className="flex items-center gap-4 border-b border-border pb-4">
              <span className="text-xs font-mono font-bold text-primary bg-primary/10 px-2 py-1 rounded-md">POST</span>
-             <code className="text-sm font-mono text-foreground">https://orionops.app/api/hit</code>
+             <code className="text-sm font-mono text-foreground">https://orionops-api-c8gdc0h3dzdxh4bt.centralindia-01.azurewebsites.net/api/hit</code>
            </div>
 
            <div>
