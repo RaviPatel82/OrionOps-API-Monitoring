@@ -12,6 +12,7 @@ import {
     isRetryable,
 } from "../../shared/events/producer/RetryStrategy.js";
 import { CircuitBreaker } from "../../shared/events/producer/CircuitBreaker.js";
+import http from 'http';
 
 const messageSchema = z.object({
     type: z.enum([EVENT_TYPES.API_HIT]),
@@ -423,6 +424,11 @@ process.on("unhandledRejection", (reason, promise) => {
     process.exit(1);
 });
 
+const port = process.env.PORT || 8080;
+http.createServer((req, res) => {
+  res.writeHead(200);
+  res.end('Consumer running');
+}).listen(port);
 startConsumerWithRetry();
 
 export default consumer;
